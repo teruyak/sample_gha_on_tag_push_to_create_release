@@ -26,9 +26,9 @@ jobs:
       
       - name: create GitHub Release
         run: | # actions/create-release はメンテナンスされなくなったのでgh CLIを使用
-          gh release create "${{ github.ref_name }}" 
-          tag.txt
-          --title "${{ github.ref_name }}"
+          gh release create "${{ github.ref_name }}" \
+          tag.txt \
+          --title "${{ github.ref_name }}" \
           --notes "Release for tag ${{ github.ref_name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
