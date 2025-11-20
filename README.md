@@ -1,1 +1,3 @@
-TBD
+# リポジトリ概要
+
+タグがpushされたらreleaseを作るGitHub Actionsのサンプル
