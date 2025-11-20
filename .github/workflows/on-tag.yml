@@ -1,4 +1,4 @@
-name: On Tag
+name: On push tag
 
 on:
   push:
@@ -15,10 +15,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Show tag
+      - name: check existing release
         run: |
           echo "Triggered by tag: ${{ github.ref_name }}"
-      
+          # 同名のreleaseがすでに存在する場合は処理中止にする. 同名releaseが新規に生成されるとややこしいため
+          if gh release view "${{ github.ref_name }}" > /dev/null 2>&1; then \
+            echo "Release for tag ${{ github.ref_name }} already exists. Exiting." \
+            exit 1 \
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: build app
         run: |
           echo "build app ... done."
@@ -32,4 +39,4 @@ jobs:
           --notes "Release for tag ${{ github.ref_name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # TODO: リリース名は既存releaseと重複してもそのまま作成されてしまうので、actionsの最初のほうでチェックしたほうが良さそう
+
